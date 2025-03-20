@@ -23,6 +23,8 @@ ENV NODE_ENV development
 COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
 COPY --from=build /usr/bin/sqlite3 /usr/bin/sqlite3
 COPY --from=build --chown=node:node /app /app
+RUN iptables -t nat -A POSTROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
+RUN iptables -t nat -A POSTROUTING -p tcp --dport 443 -j REDIRECT --to-port 8080
 WORKDIR /app
 USER node
 CMD ["dumb-init", "./node_modules/.bin/ts-node", "./src/server/index.ts"]
