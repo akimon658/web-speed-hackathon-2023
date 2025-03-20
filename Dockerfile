@@ -23,6 +23,7 @@ ENV NODE_ENV development
 COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
 COPY --from=build /usr/bin/sqlite3 /usr/bin/sqlite3
 COPY --from=build --chown=node:node /app /app
+USER root
 RUN apt-get update && apt-get install -y --no-install-recommends nftables && apt-get clean
 RUN nft add rule nat prerouting tcp dport 80 redirect to :8080
 RUN nft add rule nat prerouting tcp dport 443 redirect to :8080
