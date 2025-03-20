@@ -2,7 +2,12 @@ FROM node:18.13.0-bullseye AS build
 ENV TZ Asia/Tokyo
 ENV NODE_ENV development
 
-RUN apt-get update && apt-get install -y --no-install-recommends dumb-init sqlite3
+RUN rm -f /etc/apt/apt.conf.d/docker-clean && \
+    echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' >/etc/apt/apt.conf.d/keep-cache
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && apt-get install -y --no-install-recommends dumb-init sqlite3
 RUN npm install -g pnpm
 RUN mkdir /app
 WORKDIR /app

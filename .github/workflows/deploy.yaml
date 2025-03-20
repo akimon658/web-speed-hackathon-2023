@@ -20,10 +20,29 @@ jobs:
         username: ${{ github.repository_owner }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - uses: actions/cache@v4
+      id: cache
+      with:
+        path: |
+          var-cache-apt
+          var-lib-apt
+        key: cache-${{ hashFiles('Dockerfile') }}
+
+    - uses: reproducible-containers/buildkit-cache-dance@5b6db76d1da5c8b307d5d2e0706d266521b710de # v3.1.2
+      with:
+        cache-map: |
+          {
+            "var-cache-apt": "/var/cache/apt",
+            "var-lib-apt": "/var/lib/apt"
+          }
+        skip-extraction: ${{ steps.cache.outputs.cache-hit }}
+
     - uses: docker/build-push-action@v6
       with:
         push: true
         tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
 
     - uses: google-github-actions/auth@v2
       with:
