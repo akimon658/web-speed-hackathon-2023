@@ -23,9 +23,9 @@ ENV NODE_ENV development
 COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
 COPY --from=build /usr/bin/sqlite3 /usr/bin/sqlite3
 COPY --from=build --chown=node:node /app /app
-RUN apt-get update && apt-get install -y --no-install-recommends nftables sudo && apt-get clean
-RUN sudo nft add rule nat prerouting tcp dport 80 redirect to :8080
-RUN sudo nft add rule nat prerouting tcp dport 443 redirect to :8080
+RUN apt-get update && apt-get install -y --no-install-recommends iptables
+RUN iptables-legacy -t nat -A POSTROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
+RUN iptables-legacy -t nat -A POSTROUTING -p tcp --dport 443 -j REDIRECT --to-port 8080
 WORKDIR /app
 USER node
 CMD ["dumb-init", "./node_modules/.bin/ts-node", "./src/server/index.ts"]
