@@ -24,8 +24,8 @@ COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
 COPY --from=build /usr/bin/sqlite3 /usr/bin/sqlite3
 COPY --from=build --chown=node:node /app /app
 RUN apt-get update && apt-get install -y --no-install-recommends iptables
-RUN iptables -t nat -A POSTROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080
-RUN iptables -t nat -A POSTROUTING -p tcp --dport 443 -j REDIRECT --to-port 8080
+RUN iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-ports 8080
+RUN iptables -t nat -A PREROUTING -p tcp --destination-port 443 -j REDIRECT --to-ports 8080
 WORKDIR /app
 USER node
 CMD ["dumb-init", "./node_modules/.bin/ts-node", "./src/server/index.ts"]
