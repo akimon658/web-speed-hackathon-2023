@@ -32,4 +32,4 @@ jobs:
 
     - uses: google-github-actions/setup-gcloud@v2
 
-    - run: gcloud compute instances update-container wsh-2025 --zone us-west1-a --container-image ghcr.io/${{ github.repository }}:${{ github.sha }}
+    - run: gcloud compute instances update-container wsh2025 --zone us-west1-a --container-image ghcr.io/${{ github.repository }}:${{ github.sha }}
