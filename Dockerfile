@@ -25,6 +25,7 @@ FROM node:18.13.0-bullseye-slim
 ENV TZ Asia/Tokyo
 ENV NODE_ENV development
 ENV PORT 443
+EXPOSE 443
 
 COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
 COPY --from=build /usr/bin/sqlite3 /usr/bin/sqlite3
