@@ -1,4 +1,6 @@
 import http from 'node:http';
+import https from 'node:https';
+import fs from 'node:fs';
 
 import { koaMiddleware } from '@as-integrations/koa';
 import gracefulShutdown from 'http-graceful-shutdown';
@@ -23,7 +25,17 @@ async function init(): Promise<void> {
   await dataSource.initialize();
 
   const app = new Koa();
-  const httpServer = http.createServer(app.callback());
+  let httpServer = http.createServer(app.callback());
+
+  if (process.env.NODE_ENV === 'production') {
+    httpServer = https.createServer(
+      {
+        cert: fs.readFileSync('/etc/ssl/origin_certificate.pem'),
+        key: fs.readFileSync('/etc/ssl/private.key'),
+      },
+      app.callback(),
+    )
+  }
 
   app.keys = ['cookie-key'];
   app.use(logger());
