@@ -24,10 +24,10 @@ RUN pnpm build
 FROM node:18.13.0-bullseye-slim
 ENV TZ Asia/Tokyo
 ENV NODE_ENV production
+ENV PORT 443
 
 COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
 COPY --from=build /usr/bin/sqlite3 /usr/bin/sqlite3
 COPY --from=build --chown=node:node /app /app
 WORKDIR /app
-USER node
 CMD ["dumb-init", "./node_modules/.bin/ts-node", "./src/server/index.ts"]
