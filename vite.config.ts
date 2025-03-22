@@ -25,7 +25,6 @@ export default defineConfig(async () => {
     build: {
       cssCodeSplit: false,
       cssTarget: 'es6',
-      minify: false,
       rollupOptions: {
         output: {
           experimentalMinChunkSize: 40960,
