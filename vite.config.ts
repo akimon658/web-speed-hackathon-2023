@@ -23,7 +23,6 @@ export default defineConfig(async () => {
 
   return {
     build: {
-      cssCodeSplit: false,
       cssTarget: 'es6',
       rollupOptions: {
         output: {
