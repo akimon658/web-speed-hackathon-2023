@@ -35,7 +35,7 @@ jobs:
           {
             "var-cache-apt": "/var/cache/apt",
             "var-lib-apt": "/var/lib/apt",
-            "pnpm": "/root/.local/share/pnpm"
+            "pnpm": "/pnpm/store"
           }
         skip-extraction: ${{ steps.cache.outputs.cache-hit }}
 
