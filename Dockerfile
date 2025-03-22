@@ -16,7 +16,8 @@ COPY databases/ /app/databases/
 COPY public/ /app/public/
 COPY tools/ /app/tools/
 COPY src/ /app/src/
-RUN pnpm install
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install
 RUN pnpm build
 
 ########################################################################

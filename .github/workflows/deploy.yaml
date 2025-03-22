@@ -26,6 +26,7 @@ jobs:
         path: |
           var-cache-apt
           var-lib-apt
+          pnpm
         key: cache-${{ hashFiles('Dockerfile') }}
 
     - uses: reproducible-containers/buildkit-cache-dance@5b6db76d1da5c8b307d5d2e0706d266521b710de # v3.1.2
@@ -33,7 +34,8 @@ jobs:
         cache-map: |
           {
             "var-cache-apt": "/var/cache/apt",
-            "var-lib-apt": "/var/lib/apt"
+            "var-lib-apt": "/var/lib/apt",
+            "pnpm": "/pnpm"
           }
         skip-extraction: ${{ steps.cache.outputs.cache-hit }}
 
